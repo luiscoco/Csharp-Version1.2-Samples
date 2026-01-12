@@ -17,10 +17,10 @@ dotnet run --project P17_ForeachDispose_DisposableEnumerator
 
 The solution targets `.NET 10.0` and enforces **C# 1.0** syntax globally (via `Directory.Build.props` with `<LangVersion>ISO-1</LangVersion>`). The only 1.2‑specific behavior here is the compiler‑generated `try/finally` in `foreach` that disposes the enumerator when applicable.
 
-# C# 1.2 `foreach` and `Dispose()` — Core Samples (P25–P28)
+# C# 1.2 `foreach` and `Dispose()` - Core Samples (P25–P28)
 
 In **C# 1.2**, the compiler gained a key guarantee:  
-👉 If the enumerator returned by `GetEnumerator()` implements `IDisposable`, the compiler automatically generates a hidden `try/finally` around the loop and calls `Dispose()` when the loop ends.  
+If the enumerator returned by `GetEnumerator()` implements `IDisposable`, the compiler automatically generates a hidden `try/finally` around the loop and calls `Dispose()` when the loop ends.  
 
 That means that database readers, sockets, file streams, and other resource-holding enumerators are **automatically cleaned up** at the end of `foreach` — even on `break`, `return`, or exceptions.  
 
@@ -91,7 +91,7 @@ static void Main()
 }
 ```
 
-✅ **Takeaway:** `foreach` does the `Dispose()` for you; manual enumeration requires your own `try/finally`.
+**Takeaway:** `foreach` does the `Dispose()` for you; manual enumeration requires your own `try/finally`.
 
 ---
 
@@ -124,7 +124,7 @@ static void Main()
 }
 ```
 
-✅ **Takeaway:** If `IDisposable` isn’t present, `foreach` won’t generate a call to `Dispose()`.
+**Takeaway:** If `IDisposable` isn’t present, `foreach` won’t generate a call to `Dispose()`.
 
 ---
 
@@ -160,7 +160,7 @@ static void Main()
 }
 ```
 
-✅ **Takeaway:** Even struct enumerators get `Dispose()` calls, though under the hood the struct may be boxed when accessed via `IEnumerator`.
+**Takeaway:** Even struct enumerators get `Dispose()` calls, though under the hood the struct may be boxed when accessed via `IEnumerator`.
 
 ---
 
