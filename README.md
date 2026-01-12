@@ -3,10 +3,10 @@
 C# **1.2** introduced a key runtime‑generated code change: **`foreach` now calls `Dispose()`** on the enumerator **if** the enumerator implements `IDisposable`. These projects demonstrate that behavior in different scenarios, while staying within C# 1.x syntax (no generics, no lambdas, etc.).
 
 ## Projects
-- **P17_ForeachDispose_DisposableEnumerator** — Custom `IEnumerator : IDisposable`; show `foreach` auto‑calls `Dispose`, while a manual `while` loop must do it in `finally`.
-- **P18_ForeachDispose_NonDisposableEnumerator** — Enumerator without `IDisposable`; `foreach` **does not** call `Dispose`.
-- **P19_ForeachDispose_StructEnumerator** — **Struct** enumerator implementing `IDisposable`; demonstrates that `foreach` still calls `Dispose` (note the call happens on a boxed copy when cast to interfaces).
-- **P20_ForeachDispose_StreamReader** — Enumerator that reads file lines and implements `IDisposable`; after `foreach`, file can be deleted because the reader is closed via `Dispose`.
+- **P25_ForeachDispose_DisposableEnumerator** — Custom `IEnumerator : IDisposable`; show `foreach` auto‑calls `Dispose`, while a manual `while` loop must do it in `finally`.
+- **P26_ForeachDispose_NonDisposableEnumerator** — Enumerator without `IDisposable`; `foreach` **does not** call `Dispose`.
+- **P27_ForeachDispose_StructEnumerator** — **Struct** enumerator implementing `IDisposable`; demonstrates that `foreach` still calls `Dispose` (note the call happens on a boxed copy when cast to interfaces).
+- **P28_ForeachDispose_StreamReader** — Enumerator that reads file lines and implements `IDisposable`; after `foreach`, file can be deleted because the reader is closed via `Dispose`.
 
 ## Build
 ```bash
@@ -17,7 +17,7 @@ dotnet run --project P17_ForeachDispose_DisposableEnumerator
 
 The solution targets `.NET 10.0` and enforces **C# 1.0** syntax globally (via `Directory.Build.props` with `<LangVersion>ISO-1</LangVersion>`). The only 1.2‑specific behavior here is the compiler‑generated `try/finally` in `foreach` that disposes the enumerator when applicable.
 
-# C# 1.2 `foreach` and `Dispose()` — Core Samples (P17–P20)
+# C# 1.2 `foreach` and `Dispose()` — Core Samples (P25–P28)
 
 In **C# 1.2**, the compiler gained a key guarantee:  
 👉 If the enumerator returned by `GetEnumerator()` implements `IDisposable`, the compiler automatically generates a hidden `try/finally` around the loop and calls `Dispose()` when the loop ends.  
@@ -46,7 +46,7 @@ The following four samples (P17–P20) illustrate different cases of enumerator 
 
 ---
 
-## P17_ForeachDispose_DisposableEnumerator  
+## P25_ForeachDispose_DisposableEnumerator  
 **Custom `IEnumerator : IDisposable`; show foreach auto-calls Dispose, while a manual while loop must do it in finally.**
 
 ```csharp
@@ -95,7 +95,7 @@ static void Main()
 
 ---
 
-## P18_ForeachDispose_NonDisposableEnumerator  
+## P26_ForeachDispose_NonDisposableEnumerator  
 **Enumerator without `IDisposable`; foreach does not call Dispose.**
 
 ```csharp
@@ -128,7 +128,7 @@ static void Main()
 
 ---
 
-## P19_ForeachDispose_StructEnumerator  
+## P27_ForeachDispose_StructEnumerator  
 **Struct enumerator implementing `IDisposable`; demonstrates that foreach still calls Dispose (note the call happens on a boxed copy when cast to interfaces).**
 
 ```csharp
@@ -164,7 +164,7 @@ static void Main()
 
 ---
 
-## P20_ForeachDispose_StreamReader  
+## P28_ForeachDispose_StreamReader  
 **Enumerator that reads file lines and implements `IDisposable`; after foreach, file can be deleted because the reader is closed via Dispose.**
 
 ```csharp
@@ -196,7 +196,7 @@ static void Main()
 }
 ```
 
-✅ **Takeaway:** `foreach` disposal ensures the `StreamReader` is closed when iteration ends, so the file can be safely deleted.
+**Takeaway:** `foreach` disposal ensures the `StreamReader` is closed when iteration ends, so the file can be safely deleted.
 
 ---
 
@@ -207,4 +207,4 @@ static void Main()
 - Applies equally to class and struct enumerators.  
 - Yield-based iterators also generate disposable enumerators internally.
 
-👉 These four samples (P17–P20) form the **core demonstrations** of the C# 1.2 foreach-dispose guarantee.
+These four samples (P25–P28) form the **core demonstrations** of the C# 1.2 foreach-dispose guarantee.
